@@ -11,6 +11,7 @@
 
 	// Make variables visible to function & UI
 	$shorturl = $message = $title = $status = '';
+	$isExisting = false;
 
 	// Part to be executed if FORM has been submitted
 	if ( isset( $_REQUEST['url'] ) && $_REQUEST['url'] != 'http://' ) {
@@ -54,12 +55,13 @@
 		$return  = yourls_add_new_link( $url, $keyword, $title );
 		
 		// Make visible to UI
-		global $shorturl, $message, $status, $title;
+		global $shorturl, $message, $status, $title, $isExisting;
 
 		$shorturl = isset( $return['shorturl'] ) ? $return['shorturl'] : '';
 		$message  = isset( $return['message'] ) ? $return['message'] : '';
 		$title    = isset( $return['title'] ) ? $return['title'] : '';
 		$status   = isset( $return['status'] ) ? $return['status'] : '';
+		$isExisting = isset( $return['code'] ) && $return['code'] === 'error:url';
 		
 		// Stop here if bookmarklet with a JSON callback function ("instant" bookmarklets)
 		if( isset( $_GET['jsonp'] ) && $_GET['jsonp'] == 'yourls' ) {
@@ -76,24 +78,33 @@
 		<div class="row justify-content-center align-items-center h-100">
 			<div class="col-12 col-lg-10 col-xl-8 col-xxl-5 mt-5">
 				<div class="card border-0 mt-5">
-					<?php if( isset($status) && $status == 'success' ):  ?>
+					<?php if( $status === 'success' || $isExisting ):  ?>
 						<?php $url = preg_replace("(^https?://)", "", $shorturl );  ?>
+						<?php $safeShorturl = htmlspecialchars($shorturl, ENT_QUOTES, 'UTF-8'); ?>
 
 						<div class="close-container text-end mt-3 me-3">
 							<button type="button" class="btn-close" id="close-shortened-screen" aria-label="Close"></button>
 						</div>
 
 						<div class="card-body px-5 pb-5">
-							<h2 class="text-uppercase text-center">Your shortened link</h2>
+							<h2 class="text-uppercase text-center"><?php echo $isExisting ? 'Your existing short link' : 'Your shortened link'; ?></h2>
+							<?php if ($isExisting): ?>
+								<div class="alert alert-info mt-3 mb-0" role="status">
+									This URL already exists, so you can use its existing short link below.
+								</div>
+							<?php endif; ?>
 							
 							<div class="row justify-content-center">
 								<div class="col-10">
 									<div class="input-group input-group-block mt-4 mb-3">
-										<input type="text" class="form-control text-uppercase" value="<?php echo $shorturl; ?>" required>
-										<button class="btn btn-primary text-uppercase py-2 px-5 mt-2 mt-md-0" type="submit" id="copy-button" data-shorturl="<?php echo $shorturl; ?>">Copy</button>
+										<input type="text" class="form-control text-uppercase" value="<?php echo $safeShorturl; ?>" required>
+										<button class="btn btn-primary text-uppercase py-2 px-5 mt-2 mt-md-0" type="submit" id="copy-button" data-shorturl="<?php echo $safeShorturl; ?>">Copy</button>
 									</div>
 									<!-- Michael <span class="info">View info &amp; stats at <a href="<?php echo $shorturl; ?>+"><?php echo $url; ?>+</a></span> -->
-									<span class="info">Want a QR Code!? Click here: <a href="<?php echo $shorturl; ?>.qr" style='color: #71797E; text-decoration: underline;' target="_blank"><?php echo $shorturl; ?>.qr</a></span>
+									<h3 class="h5 text-center mt-4">Here's your QR code</h3>
+									<div class="text-center">
+										<img src="<?php echo $safeShorturl; ?>.qr" alt="QR code for <?php echo $safeShorturl; ?>" width="200" height="200" class="img-fluid border rounded p-2 bg-white" loading="lazy">
+									</div>
 								</div>
 							</div>
 						</div>
@@ -108,7 +119,7 @@
 							<?php if ( isset( $_REQUEST['url'] ) && $_REQUEST['url'] != 'http://' ): ?>
 								<?php if (strpos($message,'added') === false): ?>
 									<div class="alert alert-danger alert-dismissible fade show" role="alert">
-										<span>Oh no, <?php echo $message; ?>!</span>
+										<span><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></span>
 										<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 									</div>	    
 								<?php endif; ?>
