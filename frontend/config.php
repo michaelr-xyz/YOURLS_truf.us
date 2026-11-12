@@ -50,7 +50,7 @@ define('colour', '#35063e');
 // Footer links use a label and URL, with optional text or whole-link emphasis.
 $footerLinks = [
     [
-        "label" => "Contribute to the project?",
+        "label" => "Want to contribute?",
         "highlight" => "Buy Me a Coffee",
         "url" => "https://www.buymeacoffee.com/truf/"
     ],

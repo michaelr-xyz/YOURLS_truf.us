@@ -11668,3 +11668,7 @@ textarea.form-control-lg {
   font-size: calc(1em + 2px);
   font-weight: 700 !important;
 }
+.footer-primary-link {
+  flex: 0 0 100%;
+  text-align: center;
+}

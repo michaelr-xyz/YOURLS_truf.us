@@ -141,23 +141,26 @@
 					<?php endif; ?>
 				</div>
 				<div class="d-flex flex-column align-items-center my-3 small">
-					<div class="text-center text-white fs-6 mb-1">
+					<div class="footer-sponsor-line d-flex flex-column align-items-center justify-content-center gap-2 text-center text-white fs-6 mb-1">
 						<a class="text-white text-decoration-none" href="mailto:marketing@truf.us">
-							Would you like to sponsor? <strong class="footer-highlight">Get in touch!</strong>
+							<span class="d-block">Would you like to sponsor?</span>
+							<strong class="footer-highlight d-block">Get in touch!</strong>
 						</a>
-						<span class="mx-1 text-white" aria-hidden="true">|</span>
-						<a class="text-white text-decoration-none footer-highlight" href="https://zirytech.com?utm_source=truf&utm_medium=website&utm_id=link" target="_blank">ZiryTech</a>
+						<span class="d-flex flex-column align-items-center">
+							<span>Sponsors</span>
+							<a class="text-white text-decoration-none footer-highlight" href="https://zirytech.com?utm_source=truf&utm_medium=website&utm_id=link" target="_blank">ZiryTech</a>
+						</span>
 					</div>
 					<div class="d-flex flex-wrap align-items-center justify-content-center gap-2 mt-2">
 						<?php foreach ($footerLinks as $index => $footerLink): ?>
-							<span class="text-nowrap">
-								<?php if ($index > 0): ?>
+							<span class="<?php echo $index === 0 ? 'footer-primary-link' : 'text-nowrap'; ?>">
+								<?php if ($index > 1): ?>
 									<span class="mx-1 text-white" aria-hidden="true">|</span>
 								<?php endif; ?>
 								<a class="text-white text-decoration-none<?php echo !empty($footerLink['emphasize']) ? ' footer-highlight' : ''; ?>" href="<?php echo htmlspecialchars($footerLink['url'], ENT_QUOTES, 'UTF-8') ?>" target="_blank">
 									<?php echo htmlspecialchars($footerLink['label'], ENT_QUOTES, 'UTF-8') ?>
 									<?php if (isset($footerLink['highlight'])): ?>
-										<strong class="footer-highlight"><?php echo htmlspecialchars($footerLink['highlight'], ENT_QUOTES, 'UTF-8') ?></strong>
+										<strong class="footer-highlight d-block"><?php echo htmlspecialchars($footerLink['highlight'], ENT_QUOTES, 'UTF-8') ?></strong>
 									<?php endif; ?>
 								</a>
 							</span>
