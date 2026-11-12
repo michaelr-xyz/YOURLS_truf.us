@@ -164,7 +164,7 @@
 					</div>
 					<div class="d-flex flex-wrap align-items-center justify-content-center gap-2 mt-2">
 						<?php foreach ($footerLinks as $index => $footerLink): ?>
-							<span class="<?php echo $index === 0 ? 'footer-primary-link' : 'text-nowrap'; ?>">
+							<span class="<?php echo $index === 0 ? 'w-100 text-center' : 'text-nowrap'; ?>">
 								<?php if ($index > 1): ?>
 									<span class="mx-1 text-white" aria-hidden="true">|</span>
 								<?php endif; ?>
