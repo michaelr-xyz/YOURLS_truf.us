@@ -130,9 +130,9 @@ function yourls_is_valid_user() {
 function yourls_check_username_password() {
     global $yourls_user_passwords;
 
-    // If login form (not API), check for nonce
+    // Login forms are rendered for anonymous users, even if an earlier auth check has set YOURLS_USER.
     if(!yourls_is_API()) {
-        yourls_verify_nonce('admin_login');
+        yourls_verify_nonce('admin_login', false, '-1');
     }
 
     if( isset( $yourls_user_passwords[ $_REQUEST['username'] ] ) && yourls_check_password_hash( $_REQUEST['username'], $_REQUEST['password'] ) ) {
