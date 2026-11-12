@@ -16,33 +16,40 @@
 		textArea.select();
 
 		try {
-			var successful = document.execCommand('copy');
-			var msg = successful ? 'successful' : 'unsuccessful';
-			console.log('Fallback: Copying text command was ' + msg);
+			return document.execCommand('copy');
 		} catch (err) {
 			console.error('Fallback: Oops, unable to copy', err);
+			return false;
+		} finally {
+			document.body.removeChild(textArea);
 		}
-
-		document.body.removeChild(textArea);
 	}
 
 	function copyTextToClipboard(text) {
 		if (!navigator.clipboard) {
-			fallbackCopyTextToClipboard(text);
-			return;
+			return Promise.resolve(fallbackCopyTextToClipboard(text));
 		}
-		navigator.clipboard.writeText(text).then(function() {
-			console.log('Async: Copying to clipboard was successful!');
+		return navigator.clipboard.writeText(text).then(function() {
+			return true;
 		}, function(err) {
 			console.error('Async: Could not copy text: ', err);
+			return false;
 		});
 	}
 
 	const copyBtn = document.querySelector('button#copy-button');
 
 	if (copyBtn) {
+		let copyFeedbackTimeout;
+		copyBtn.setAttribute('aria-live', 'polite');
 		copyBtn.addEventListener('click', function(event) {
-			copyTextToClipboard(event.target.dataset.shorturl);
+			copyTextToClipboard(event.currentTarget.dataset.shorturl).then(function(success) {
+				window.clearTimeout(copyFeedbackTimeout);
+				copyBtn.textContent = success ? 'Copied!' : 'Copy failed';
+				copyFeedbackTimeout = window.setTimeout(function() {
+					copyBtn.textContent = 'Copy';
+				}, 2000);
+			});
 		});
 	}
 

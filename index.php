@@ -103,6 +103,7 @@
 						</div>
 						<div class="card-body px-md-5">
 							<p><?php echo description ?></p>
+							<p class="small text-muted mb-0">Paste a link to create a shareable truf.us URL.</p>
 
 							<?php if ( isset( $_REQUEST['url'] ) && $_REQUEST['url'] != 'http://' ): ?>
 								<?php if (strpos($message,'added') === false): ?>
@@ -135,24 +136,34 @@
 									<div class="cf-turnstile mt-3" data-sitekey="<?php echo htmlspecialchars(turnstileSiteKey, ENT_QUOTES, 'UTF-8'); ?>" data-action="shorten_link"></div>
 								<?php endif; ?>
 							</form>
+							<p class="small text-muted text-center mt-3 mb-0">Free to use. No account required.</p>
 						</div>
 					<?php endif; ?>
 				</div>
-				<div class="d-flex flex-column flex-md-row align-items-center my-3">
-					<span class="text-white fw-light">&copy; 2011 - <?php echo date("Y"); ?> <?php echo shortTitle ?></span>
-					<div class="ms-3">
-						<?php foreach ($footerLinks as $key => $val): ?>
-							<a class="bold-link me-3 text-white text-decoration-none" href="<?php echo $val ?>" target="_blank"><span><?php echo $key ?></span></a>
+				<div class="d-flex flex-column align-items-center my-3 small">
+					<div class="text-center text-white fs-6 mb-1">
+						<a class="text-white text-decoration-none" href="mailto:marketing@truf.us">
+							Would you like to sponsor? <strong class="footer-highlight">Get in touch!</strong>
+						</a>
+						<span class="mx-1 text-white" aria-hidden="true">|</span>
+						<a class="text-white text-decoration-none footer-highlight" href="https://zirytech.com?utm_source=truf&utm_medium=website&utm_id=link" target="_blank">ZiryTech</a>
+					</div>
+					<div class="d-flex flex-wrap align-items-center justify-content-center gap-2 mt-2">
+						<?php foreach ($footerLinks as $index => $footerLink): ?>
+							<span class="text-nowrap">
+								<?php if ($index > 0): ?>
+									<span class="mx-1 text-white" aria-hidden="true">|</span>
+								<?php endif; ?>
+								<a class="text-white text-decoration-none<?php echo !empty($footerLink['emphasize']) ? ' footer-highlight' : ''; ?>" href="<?php echo htmlspecialchars($footerLink['url'], ENT_QUOTES, 'UTF-8') ?>" target="_blank">
+									<?php echo htmlspecialchars($footerLink['label'], ENT_QUOTES, 'UTF-8') ?>
+									<?php if (isset($footerLink['highlight'])): ?>
+										<strong class="footer-highlight"><?php echo htmlspecialchars($footerLink['highlight'], ENT_QUOTES, 'UTF-8') ?></strong>
+									<?php endif; ?>
+								</a>
+							</span>
 						<?php endforeach ?>
 					</div>
-				</div>
-				<div class="d-flex flex-column flex-md-row align-items-center my-3" style="padding-top: 50px;">
-					<span class="text-white fw-light">Would you like to Sponser?</span>
-					<div class="ms-3">
-						<span class="bold-link me-3 text-white"><a class="bold-link me-3 text-white text-decoration-none" href="mailto:marketing@truf.us">Imagine Your Link Here!</span></a>
-						<span class="bold-link me-3 text-white"><a class="bold-link me-3 text-white text-decoration-none" href="https://zirytech.com?utm_source=truf&utm_medium=website&utm_id=link" target="_blank">ZiryTech</
-						<span class="bold-link me-3 text-white"><a class="bold-link me-3 text-white text-decoration-none" href="https://michael.ong?utm_source=truf&utm_medium=website&utm_id=link" target="_blank">MICHAEL.ong</span></a>
-					</div>
+					<span class="text-white fw-light text-nowrap mt-2">&copy; 2011 - <?php echo date("Y"); ?> <?php echo shortTitle ?></span>
 				</div>
 			</div>
 		</div>

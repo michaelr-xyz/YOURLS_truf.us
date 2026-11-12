@@ -25,6 +25,12 @@ $border-radius: 6px;
     text-transform: uppercase;
 }
 
+.footer-highlight {
+    font-family: $montserrat;
+    font-size: calc(1em + 2px);
+    font-weight: 700 !important;
+}
+
 @include media-breakpoint-down(md) {
     .input-group-block {
         input, button {

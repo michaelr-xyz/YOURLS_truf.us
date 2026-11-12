@@ -47,13 +47,23 @@ define('colour', '#35063e');
 
 // FOOTER
 
-// These are the links in the footer. Add a new link for each new link.
-// The array follows a title link structure:
-// "TITLE" => "LINK",
+// Footer links use a label and URL, with optional text or whole-link emphasis.
 $footerLinks = [
-    "Buy Me a Coffee"   =>  "https://www.buymeacoffee.com/truf/",
-    "Privacy Policy"    =>  "/privacy.php",
-    "MichaelR.xyz"      =>  "https://michaelr.xyz?utm_source=truf&utm_medium=website&utm_id=link"
+    [
+        "label" => "Contribute to the project?",
+        "highlight" => "Buy Me a Coffee",
+        "url" => "https://www.buymeacoffee.com/truf/"
+    ],
+    [
+        "label" => "Privacy Policy",
+        "url" => "/privacy.php",
+        "emphasize" => true
+    ],
+    [
+        "label" => "MichaelR.xyz",
+        "url" => "https://michaelr.xyz?utm_source=truf&utm_medium=website&utm_id=link",
+        "emphasize" => true
+    ]
     //"Legal"   =>  "https://yourls.org/",
     //"Admin"   =>  "/admin"
 ];
