@@ -32,11 +32,6 @@ class Init {
             date_default_timezone_set( 'UTC' );
         }
 
-        // Load locale
-        if ($actions->load_default_textdomain === true) {
-            yourls_load_default_textdomain();
-        }
-
         // Check if we are in maintenance mode - if yes, it will die here.
         if ($actions->check_maintenance_mode === true) {
             yourls_check_maintenance_mode();
@@ -45,11 +40,6 @@ class Init {
         // Fix REQUEST_URI for IIS
         if ($actions->fix_request_uri === true) {
             yourls_fix_request_uri();
-        }
-
-        // If request for an admin page is http:// and SSL is required, redirect
-        if ($actions->redirect_ssl === true) {
-            $this->redirect_ssl_if_needed();
         }
 
         // Create the YOURLS object $ydb that will contain everything we globally need
@@ -110,6 +100,16 @@ class Init {
             yourls_do_action( 'plugins_loaded' );
         }
 
+        // Load locale
+        if ($actions->load_default_textdomain === true) {
+            yourls_load_default_textdomain();
+        }
+
+        // If request for an admin page is http:// and SSL is required, redirect
+        if ($actions->redirect_ssl === true) {
+            $this->redirect_ssl_if_needed();
+        }
+
         // Is there a new version of YOURLS ?
         if ($actions->check_new_version === true) {
             if (yourls_is_installed() && !yourls_is_upgrading()) {
@@ -126,16 +126,14 @@ class Init {
     }
 
     /**
+     * Redirect to the SSL version of the website if needed
+     *
      * @since  1.7.3
      * @return void
      */
-    public function redirect_ssl_if_needed() {
+    public function redirect_ssl_if_needed(): void {
         if (yourls_is_admin() && yourls_needs_ssl() && !yourls_is_ssl()) {
-            if ( 0 === strpos( $_SERVER['REQUEST_URI'], 'http' ) ) {
-                yourls_redirect( preg_replace( '|^http://|', 'https://', $_SERVER['REQUEST_URI'] ) );
-            } else {
-                yourls_redirect( 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
-            }
+            yourls_redirect(yourls_get_ssl_redirect_url($_SERVER['REQUEST_URI'] ?? '/'));
             exit();
         }
     }

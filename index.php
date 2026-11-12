@@ -14,28 +14,28 @@
 
 	// Part to be executed if FORM has been submitted
 	if ( isset( $_REQUEST['url'] ) && $_REQUEST['url'] != 'http://' ) {
-		if (enableRecaptcha) {
-			// Use reCAPTCHA
-			$token = $_POST['token'];
-			$action = $_POST['action'];
-			
-			// call curl to POST request
+		if (enableTurnstile) {
+			// Cloudflare Turnstile verification. It returns a different payload than reCAPTCHA v3.
+			$token = $_POST['cf-turnstile-response'] ?? '';
 			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL,"https://challenges.cloudflare.com/turnstile/v0/siteverify");
-			curl_setopt($ch, CURLOPT_POST, 1);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(array('secret' => recaptchaV3SecretKey, 'response' => $token)));
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt_array($ch, array(
+			    CURLOPT_URL => 'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+			    CURLOPT_POST => true,
+			    CURLOPT_POSTFIELDS => http_build_query(array(
+			        'secret' => turnstileSecretKey,
+			        'response' => $token,
+			        'remoteip' => $_SERVER['REMOTE_ADDR'] ?? '',
+			    )),
+			    CURLOPT_RETURNTRANSFER => true,
+			));
 			$response = curl_exec($ch);
 			curl_close($ch);
 			$arrResponse = json_decode($response, true);
 			
-			// verify the response
-			if($arrResponse["success"] == '1' && $arrResponse["action"] == $action && $arrResponse["score"] >= 0.5) {
-				// reCAPTCHA succeeded
+			if (!empty($arrResponse['success'])) {
 				shorten();
 			} else {
-				// reCAPTCHA failed
-				$message = "reCAPTCHA failed";
+				$message = 'Turnstile verification failed';
 			}
 		} else {
 			// Don't use reCAPTCHA
@@ -130,6 +130,9 @@
 											</div>
 										</div>
 									</div>
+								<?php endif; ?>
+								<?php if (enableTurnstile): ?>
+									<div class="cf-turnstile mt-3" data-sitekey="<?php echo htmlspecialchars(turnstileSiteKey, ENT_QUOTES, 'UTF-8'); ?>" data-action="shorten_link"></div>
 								<?php endif; ?>
 							</form>
 						</div>

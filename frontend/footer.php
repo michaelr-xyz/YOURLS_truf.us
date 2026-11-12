@@ -55,35 +55,8 @@
 	}
 </script>
 
-<?php if (enableRecaptcha) : ?>
-	<!-- Michael <script src="https://www.google.com/recaptcha/api.js?render=<?php echo recaptchaV3SiteKey ?>"></script> -->
-	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?compat=recaptcha" async defer></script>
-	<script>
-		const shortenForm = document.querySelector("form#shortenlink");
-
-		if (shortenForm) {
-			shortenForm.addEventListener("submit", function(e){
-				e.preventDefault();
-				grecaptcha.ready(function() {
-					grecaptcha.execute('<?php echo recaptchaV3SiteKey ?>', {action: 'shorten_link'}).then(function(token) {
-						const tokenInput = document.createElement("input");
-						tokenInput.setAttribute("type", "hidden");
-						tokenInput.setAttribute("name", "token");
-						tokenInput.setAttribute("value", token);
-						
-						const actionInput = document.createElement("input");
-						actionInput.setAttribute("type", "hidden");
-						actionInput.setAttribute("name", "action");
-						actionInput.setAttribute("value", "shorten_link");
-						
-						shortenForm.prepend(tokenInput);
-						shortenForm.prepend(actionInput);
-						shortenForm.submit();
-					});
-				});
-			});
-		}
-	</script>
+<?php if (enableTurnstile) : ?>
+	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <?php endif; ?>
 
 <!-- Google AdSense - truf.us

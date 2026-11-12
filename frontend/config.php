@@ -18,15 +18,16 @@ define('favicon', '/frontend/assets/img/favicon.ico');
 // Logo for your site, displayed on home page
 define('logo', '/frontend/assets/img/logo-black.png');
 
-// Enable reCAPTCHA V3
-// It is highly recommended you use reCAPTCHA V3. It will stop spam. You can get a site and secret key from here: https://www.google.com/recaptcha/admin/create
-define("enableRecaptcha", false);
+// Enable Cloudflare Turnstile
+// It is highly recommended you use Turnstile to stop spam. You can get a site and secret key from here:
+// https://dash.cloudflare.com/?to=/:account/turnstile
+define("enableTurnstile", false);
 
-// reCAPTCHA V3 Site Key
-define("recaptchaV3SiteKey", '0x4AAAAAAAwhabRTvVD3iN5A');
+// Cloudflare Turnstile Site Key
+define("turnstileSiteKey", '0x4AAAAAAAwhabRTvVD3iN5A');
 
-// reCAPTCHA V3 Secret Key
-define("recaptchaV3SecretKey", '0x4AAAAAAAwhafsLo-2WOajAZ5RsfzAkVK4');
+// Set TURNSTILE_SECRET_KEY in the server environment.
+define("turnstileSecretKey", getenv('TURNSTILE_SECRET_KEY') ?: '');
 
 // Enables the custom URL field
 // true or false
